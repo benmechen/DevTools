@@ -5,22 +5,22 @@ import { dbConfig } from './db.config';
 import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot(),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) =>
-        dbConfig(configService, {
-          dbName: 'DB_NAME',
-          name: 'default',
-          synchronize: true,
-          cache: true,
-        }),
-      inject: [ConfigService],
-    }),
-    UserModule,
-  ],
-  controllers: [],
-  providers: [],
+	imports: [
+		ConfigModule.forRoot(),
+		TypeOrmModule.forRootAsync({
+			imports: [ConfigModule],
+			useFactory: (configService: ConfigService) =>
+				dbConfig(configService, {
+					dbName: 'DB_NAME',
+					name: 'default',
+					synchronize: true,
+					cache: true,
+				}),
+			inject: [ConfigService],
+		}),
+		UserModule,
+	],
+	controllers: [],
+	providers: [],
 })
 export class AppModule {}
