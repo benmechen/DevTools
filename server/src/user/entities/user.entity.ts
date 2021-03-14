@@ -21,5 +21,6 @@ export class User extends Node {
 	@OneToMany(() => Token, (token) => token.user, {
 		cascade: true,
 	})
+	@Exclude()
 	issuedTokens: Token[];
 }

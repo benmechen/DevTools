@@ -17,7 +17,7 @@ export class AuthController {
 		const accessToken = await this.authService.createAccessToken(user);
 
 		// Whitelist token
-		await this.authService.saveToken(user, accessToken);
+		// await this.authService.saveToken(user, accessToken);
 
 		return { accessToken };
 	}

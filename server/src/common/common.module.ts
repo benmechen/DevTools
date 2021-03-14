@@ -27,7 +27,14 @@ export const SecretsFactory = {
 };
 
 @Module({
-	imports: [JwtModule.register({}), TypeOrmModule.forFeature([Token])],
+	imports: [
+		JwtModule.register({
+			verifyOptions: {
+				ignoreExpiration: false,
+			},
+		}),
+		TypeOrmModule.forFeature([Token]),
+	],
 	providers: [
 		HelperService,
 		HashService,
