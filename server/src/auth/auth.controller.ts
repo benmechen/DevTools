@@ -6,22 +6,12 @@ import { LoginDTO } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
-	constructor(
-		private userService: UserService,
-		private authService: AuthService,
-	) {}
+	constructor(private authService: AuthService) {}
 
 	@Post('login')
 	async login(@Body() { email, password }: LoginDTO) {
-		// Find the user
-		const user = await this.userService.findByEmailOrFail(email);
-
 		// Check if passwords match
-		const doPasswordsMatch = await this.authService.verifyPassword(
-			user,
-			password,
-		);
-		if (!doPasswordsMatch) throw new UserNotFoundException();
+		const user = await this.authService.verifyPassword(email, password);
 
 		// Generate access token
 		const accessToken = await this.authService.createAccessToken(user);

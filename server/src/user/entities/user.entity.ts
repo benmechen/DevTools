@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { Node } from '../../common/base.entity';
 import { Token } from '../../common/token/token.entity';
@@ -14,6 +15,7 @@ export class User extends Node {
 	email: string;
 
 	@Column()
+	@Exclude()
 	password: string;
 
 	@OneToMany(() => Token, (token) => token.user, {

@@ -4,6 +4,8 @@ import { HashService } from '../common/hash/hash.service';
 import { Token } from '../common/token/token.entity';
 import { TokenService } from '../common/token/token.service';
 import { User } from '../user/entities/user.entity';
+import { UserNotFoundException } from '../user/user-not-found.exception';
+import { UserService } from '../user/user.service';
 
 type AuthTokenPayload = {
 	sub: string;
@@ -15,6 +17,7 @@ export class AuthService {
 	private accessTokenLifetime = '1 year';
 
 	constructor(
+		private userService: UserService,
 		private hashService: HashService,
 		private tokenService: TokenService,
 		private configService: ConfigService,
@@ -25,13 +28,28 @@ export class AuthService {
 	}
 
 	/**
-	 * Check if a given password matches a user's password
-	 * @param user User
-	 * @param password Inputted password
-	 * @returns Predicate stating if the passwords match
+	 * Make sure the user exists, and they have the required permissions
+	 * @param id ID of the user to verify
 	 */
-	async verifyPassword(user: User, password: string): Promise<boolean> {
-		return this.hashService.compare(password, user.password);
+	async validateUser(id: string): Promise<User | null> {
+		const user = await this.userService.findByID(id);
+
+		return user;
+	}
+
+	/**
+	 * Check if a given password matches a user's password
+	 * @param email User's email
+	 * @param password Inputted password
+	 * @returns User
+	 */
+	async verifyPassword(email: string, password: string): Promise<User> {
+		const user = await this.userService.findByEmailOrFail(email);
+
+		const doMatch = await this.hashService.compare(password, user.password);
+		if (!doMatch) throw new UserNotFoundException();
+
+		return user;
 	}
 
 	/**
