@@ -1,15 +1,9 @@
-import {
-	Column,
-	CreateDateColumn,
-	Entity,
-	PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
+import { Node } from '../../common/base.entity';
+import { Token } from '../../common/token/token.entity';
 
 @Entity('users')
-export class User {
-	@PrimaryGeneratedColumn('uuid')
-	id: string;
-
+export class User extends Node {
 	@Column()
 	firstName: string;
 
@@ -22,6 +16,8 @@ export class User {
 	@Column()
 	password: string;
 
-	@CreateDateColumn()
-	created: Date;
+	@OneToMany(() => Token, (token) => token.user, {
+		cascade: true,
+	})
+	issuedTokens: Token[];
 }

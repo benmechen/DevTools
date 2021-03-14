@@ -7,6 +7,7 @@ import { InvalidIDException } from '../common/invalidID.exception';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { UserNotFoundException } from './user-not-found.exception';
 
 @Injectable()
 export class UserService {
@@ -45,7 +46,7 @@ export class UserService {
 	 */
 	async findByIDOrFail(id: string): Promise<User> {
 		const user = await this.findByID(id);
-		if (!user) throw new NotFoundException('User not found');
+		if (!user) throw new UserNotFoundException();
 
 		return user;
 	}
@@ -59,6 +60,19 @@ export class UserService {
 		return this.userRepository.findOne({
 			email,
 		});
+	}
+
+	/**
+	 * Find a user by their email, throwing exception if not found
+	 * @param id User email
+	 * @throws `NotFoundException` if user is not found
+	 * @returns User
+	 */
+	async findByEmailOrFail(email: string): Promise<User> {
+		const user = await this.findByEmail(email);
+		if (!user) throw new UserNotFoundException();
+
+		return user;
 	}
 
 	/**

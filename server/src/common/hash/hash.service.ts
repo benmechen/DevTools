@@ -1,11 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { hash, compare } from 'bcrypt';
 
 @Injectable()
 export class HashService {
-	private rounds = 12;
-
-	constructor() {}
+	constructor(@Inject('ROUNDS') @Optional() private rounds = 12) {}
 
 	/**
 	 * Hash data using hashing algorithm
