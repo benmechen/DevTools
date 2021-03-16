@@ -5,6 +5,8 @@ import { dbConfig } from './db.config';
 import { CommonModule } from './common/common.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { ProjectModule } from './project/project.module';
+import { EnvironmentModule } from './environment/environment.module';
 
 @Module({
 	imports: [
@@ -25,6 +27,8 @@ import { AuthModule } from './auth/auth.module';
 		CommonModule,
 		UserModule,
 		AuthModule,
+		ProjectModule,
+		EnvironmentModule,
 	],
 	controllers: [],
 	providers: [],
